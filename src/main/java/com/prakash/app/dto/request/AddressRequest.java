@@ -19,7 +19,7 @@ public class AddressRequest {
   @NotBlank String flatno;
   @NotBlank String street;
 
-  @Pattern(regexp = "[1-9]{1}[0-9]{4,5,6}")
+  @Pattern(regexp = "[1-9]{1}[0-9]{4,5}")
   String pincode;
 
   @NotBlank String state;

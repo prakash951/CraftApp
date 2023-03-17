@@ -59,7 +59,7 @@ public class UserService {
   }
 
   @Transactional(propagation = Propagation.MANDATORY)
-  private Address createAddress(AddressRequest addres, User user) {
+  public Address createAddress(AddressRequest addres, User user) {
     Address address = new Address();
     BeanUtils.copyProperties(addres, address);
     address.setUser(user);
@@ -91,7 +91,7 @@ public class UserService {
   }
 
   @Transactional(propagation = Propagation.MANDATORY)
-  private Address updateAddress(AddressRequest addres, User user) {
+  public Address updateAddress(AddressRequest addres, User user) {
     Optional<Address> typeOfAddress =
         user.getAddress().stream()
             .filter(res -> res.getType().equalsIgnoreCase(addres.getType()))
@@ -108,7 +108,7 @@ public class UserService {
    * @param existingUser
    */
   @Transactional(propagation = Propagation.MANDATORY)
-  void updateUser(UserRequest request, User existingUser) {
+  public void updateUser(UserRequest request, User existingUser) {
     if (request.getPassword() != null) {
       existingUser.setPassword(getDigest(request.getPassword()));
       existingUser.setConfirmPassword(getDigest(request.getPassword()));
@@ -174,8 +174,8 @@ public class UserService {
       Page<User> users = myUserRepository.findAll(pageRequest);
       List<UserResponse> userResponses =
           users.stream()
-              .map(user -> createSuccessResponse(user))
-              .map(user -> user.get())
+              .map(this::createSuccessResponse)
+              .map(Optional::get)
               .collect(Collectors.toList());
       return userResponses;
     }
@@ -185,12 +185,10 @@ public class UserService {
   public List<UserResponse> getAllUser() {
     log.info("Inside get all users");
     List<User> users = myUserRepository.findAll();
-    List<UserResponse> userResponses =
-        users.stream()
-            .map(user -> createSuccessResponse(user))
-            .map(user -> user.get())
-            .collect(Collectors.toList());
-    return userResponses;
+    return users.stream()
+        .map(this::createSuccessResponse)
+        .map(Optional::get)
+        .collect(Collectors.toList());
   }
 
   public Optional<UserAddressResponse> getUser(String uid) {

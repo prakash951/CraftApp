@@ -8,10 +8,10 @@ import com.prakash.app.entity.User;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-public class ValidateRequestUtilTest {
+class ValidateRequestUtilTest {
 
   @Test
-  public void testValidate() {
+  void testValidate() {
     UserRequest request = new UserRequest();
     request.setPassword("abc");
     request.setConfirmPassword("bcd");
@@ -21,7 +21,7 @@ public class ValidateRequestUtilTest {
   }
 
   @Test
-  public void testValidate1() {
+  void testValidate1() {
     UserRequest request = new UserRequest();
     request.setPassword("abc");
     request.setConfirmPassword("bcd");
@@ -31,7 +31,7 @@ public class ValidateRequestUtilTest {
   }
 
   @Test
-  public void testValidate2() {
+  void testValidate2() {
     UserRequest request = new UserRequest();
     request.setPassword("abc");
     request.setConfirmPassword("abc");
@@ -41,7 +41,7 @@ public class ValidateRequestUtilTest {
   }
 
   @Test
-  public void testValidateUpdate() {
+  void testValidateUpdate() {
     User user = new User();
     UserRequest updateUser = new UserRequest();
     updateUser.setPassword("abc");
@@ -51,7 +51,7 @@ public class ValidateRequestUtilTest {
   }
 
   @Test
-  public void testValidateUpdate1() {
+  void testValidateUpdate1() {
     User user = new User();
     user.setPhoneNumber("345676789");
     UserRequest updateUser = new UserRequest();

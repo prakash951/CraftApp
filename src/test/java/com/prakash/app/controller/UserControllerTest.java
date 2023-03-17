@@ -17,14 +17,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @ExtendWith(MockitoExtension.class)
-public class UserControllerTest {
+class UserControllerTest {
 
   @Mock UserService myUserService;
 
   @InjectMocks UserController myUserController;
 
   @Test
-  public void createUserTest() {
+  void createUserTest() {
     UserRequest myUserRequest = new UserRequest();
     myUserRequest.setCarName("bmw");
     myUserRequest.setCarNumber("AP39LP3452");
@@ -47,7 +47,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void createUserTest1() {
+  void createUserTest1() {
     UserRequest myUserRequest = new UserRequest();
     myUserRequest.setCarName("bmw");
     myUserRequest.setCarNumber("AP39LP3452");
@@ -68,7 +68,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void createUserTest2() {
+  void createUserTest2() {
     UserRequest myUserRequest = new UserRequest();
     myUserRequest.setCarName("bmw");
     myUserRequest.setCarNumber("AP39LP3452");
@@ -85,5 +85,5 @@ public class UserControllerTest {
   }
 
   @Test
-  public void deleteUserTest1() {}
+  void deleteUserTest1() {}
 }
