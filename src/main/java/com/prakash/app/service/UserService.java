@@ -13,6 +13,7 @@ import com.prakash.app.util.ValidateRequestUtil;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,6 +24,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +40,7 @@ public class UserService {
   @Autowired AddressRepository myAddressRepository;
 
   @Transactional
+  @Retryable(maxAttempts = 2, recover = "createBackOffResponse", backoff = @Backoff(delay = 100))
   public Optional<UserResponse> createUser(UserRequest request) {
     log.info("Inside create user");
     UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(request)).getBytes());
@@ -68,6 +73,7 @@ public class UserService {
   }
 
   @Transactional
+  @Retryable(maxAttempts = 2, recover = "createBackOffResponse", backoff = @Backoff(delay = 100))
   public Optional<?> updateUser(String uid, UserRequest request) {
     log.info("Inside update user");
     Optional<User> user = myUserRepository.findByUid(uid);
@@ -130,6 +136,15 @@ public class UserService {
     }
   }
 
+  @Recover
+  private Optional<UserResponse> createBackOffResponse(Exception e, UserRequest request) {
+    log.info("Inside create success response");
+    UserResponse response = new UserResponse();
+    response.setId(String.valueOf("-9999999999"));
+    response.setName("Backoff Response");
+    return Optional.of(response);
+  }
+
   private Optional<UserResponse> createSuccessResponse(User user) {
     log.info("Inside create success response");
     UserResponse response = new UserResponse();
@@ -140,12 +155,18 @@ public class UserService {
   }
 
   @Transactional
+  @Retryable(maxAttempts = 2, recover = "deleteBackoffUser", backoff = @Backoff(delay = 100))
   public Optional<?> deleteUser(String uid) {
     log.info("Inside delete user");
     int deleted = myUserRepository.deleteByUid(uid);
     if (deleted > 0) {
       return Optional.of("User with uid :" + uid + " deleted. ");
     }
+    return Optional.empty();
+  }
+
+  @Recover
+  public Optional<?> deleteBackoffUser(RuntimeException e, String uid) {
     return Optional.empty();
   }
 
@@ -166,6 +187,7 @@ public class UserService {
     return new String(hash, StandardCharsets.UTF_16);
   }
 
+  @Retryable(maxAttempts = 2, recover = "getBackOffAllUser", backoff = @Backoff(delay = 100))
   public List<UserResponse> getAllUser(Integer pageNumber, Integer pageSize) {
     if (pageNumber != null && pageSize != null) {
       log.info("Inside get all users");
@@ -182,6 +204,14 @@ public class UserService {
     return getAllUser();
   }
 
+  @Recover
+  public List<UserResponse> getBackOffAllUser() {
+    log.info("Inside get all users");
+    List<UserResponse> users = new ArrayList<>();
+    return users;
+  }
+
+  @Retryable(maxAttempts = 2, recover = "getBackOffAllUser", backoff = @Backoff(delay = 100))
   public List<UserResponse> getAllUser() {
     log.info("Inside get all users");
     List<User> users = myUserRepository.findAll();
@@ -191,6 +221,12 @@ public class UserService {
         .collect(Collectors.toList());
   }
 
+  @Recover
+  public Optional<UserAddressResponse> getBackOffUser(RuntimeException e, String uid) {
+    return Optional.empty();
+  }
+
+  @Retryable(maxAttempts = 2, recover = "getBackOffUser", backoff = @Backoff(delay = 100))
   public Optional<UserAddressResponse> getUser(String uid) {
     log.info("Inside get user");
     Optional<User> users = myUserRepository.findByUid(uid);

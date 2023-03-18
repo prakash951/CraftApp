@@ -19,12 +19,12 @@ import org.springframework.boot.actuate.endpoint.web.servlet.WebMvcEndpointHandl
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.util.StringUtils;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
-@EnableWebMvc
+@EnableRetry
 @SpringBootApplication
 public class CraftAppApplication {
 

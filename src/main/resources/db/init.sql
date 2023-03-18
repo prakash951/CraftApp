@@ -1,5 +1,5 @@
 CREATE TABLE public.user (
-	id SERIAL NOT NULL,
+	id INTEGER NOT NULL,
 	uid VARCHAR(60) UNIQUE,
 	firstname VARCHAR(45) NOT NULL,
 	lastname VARCHAR(45) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE public.user (
 
 CREATE TABLE public.address
 (
-    id SERIAL NOT NULL,
+    id INTEGER NOT NULL,
     type VARCHAR(15) NOT NULL,
     uid integer NOT NULL,
     name VARCHAR(60) NOT NULL,

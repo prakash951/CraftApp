@@ -34,11 +34,13 @@ dependencies {
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 	implementation 'io.opentracing.contrib:opentracing-spring-jaeger-web-starter:3.3.1'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	testImplementation 'com.h2database:h2'
 	compileOnly 'org.projectlombok:lombok'
 	implementation 'org.postgresql:postgresql'
+	implementation 'org.springframework.retry:spring-retry'
+	implementation 'org.springframework:spring-aspects'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'com.h2database:h2'
 }
 
 dependencyManagement {

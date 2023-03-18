@@ -55,7 +55,7 @@ services:
       environment:
         DB_SCHEMA: public
         POSTGRES_DB: uber
-        DB_URL: jdbc:postgresql://app_postgres:5432/uber
+        DB_URL: jdbc:postgresql://app_postgres:5432/uber?currentSchema=public
         DB_USER: postgres
         DB_PASSWORD: postgres
         JAEGAR_URL: http://jaeger:14268/api/traces
