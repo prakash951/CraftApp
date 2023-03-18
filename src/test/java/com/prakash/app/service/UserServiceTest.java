@@ -6,18 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import com.prakash.app.dto.request.AddressRequest;
 import com.prakash.app.dto.request.UserRequest;
 import com.prakash.app.dto.response.UserAddressResponse;
@@ -25,210 +13,264 @@ import com.prakash.app.dto.response.UserResponse;
 import com.prakash.app.entity.User;
 import com.prakash.app.repository.AddressRepository;
 import com.prakash.app.repository.UserRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-	@Mock
-	UserRepository myUserRepository;
+  @Mock UserRepository myUserRepository;
 
-	@Mock
-	AddressRepository myAddressRepository;
+  @Mock AddressRepository myAddressRepository;
 
-	UserRequest myUserRequest;
+  UserRequest myUserRequest;
 
-	@InjectMocks
-	UserService myUserService;
+  @InjectMocks UserService myUserService;
 
-	@Test
-	void createUserAlreadyExists() {
+  @Test
+  void createUserAlreadyExists() {
 
-		myUserRequest = UserRequest.builder().carName("jeep").carNumber("KA03TP3421").password("cross")
-				.confirmPassword("cross").phoneNumber("3452314567").build();
+    myUserRequest =
+        UserRequest.builder()
+            .carName("jeep")
+            .carNumber("KA03TP3421")
+            .password("cross")
+            .confirmPassword("cross")
+            .phoneNumber("3452314567")
+            .build();
 
-		UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
-		String myUid = myId.toString();
+    UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
+    String myUid = myId.toString();
 
-		when(myUserRepository.findByUid(myUid)).thenReturn(Optional.of(new User()));
+    when(myUserRepository.findByUid(myUid)).thenReturn(Optional.of(new User()));
 
-		Optional<UserResponse> response = myUserService.createUser(myUserRequest);
-		assertEquals(false, response.isPresent());
-	}
+    Optional<UserResponse> response = myUserService.createUser(myUserRequest);
+    assertEquals(false, response.isPresent());
+  }
 
-	@Test
-	void createNewUser() {
+  @Test
+  void createNewUser() {
 
-		myUserRequest = UserRequest.builder().carName("jeep").carNumber("KA03TP3421").password("cross")
-				.confirmPassword("cross").phoneNumber("3452314567").build();
+    myUserRequest =
+        UserRequest.builder()
+            .carName("jeep")
+            .carNumber("KA03TP3421")
+            .password("cross")
+            .confirmPassword("cross")
+            .phoneNumber("3452314567")
+            .build();
 
-		UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
-		String myUid = myId.toString();
+    UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
+    String myUid = myId.toString();
 
-		User user = new User();
-		user.setUid(myUid);
+    User user = new User();
+    user.setUid(myUid);
 
-		when(myUserRepository.findByUid(myUid)).thenReturn(Optional.empty());
+    when(myUserRepository.findByUid(myUid)).thenReturn(Optional.empty());
 
-		when(myUserRepository.save(any())).thenReturn(user);
+    when(myUserRepository.save(any())).thenReturn(user);
 
-		Optional<UserResponse> response = myUserService.createUser(myUserRequest);
-		assertEquals(true, response.isPresent());
-		assertEquals(myUid, response.get().getId());
-	}
+    Optional<UserResponse> response = myUserService.createUser(myUserRequest);
+    assertEquals(true, response.isPresent());
+    assertEquals(myUid, response.get().getId());
+  }
 
-	@Test
-	void updateUserThrowsException() {
+  @Test
+  void updateUserThrowsException() {
 
-		myUserRequest = UserRequest.builder().carName("jeep").carNumber("KA03TP3421").password("cross")
-				.confirmPassword("cross").phoneNumber("3452314567").enabled(true).build();
+    myUserRequest =
+        UserRequest.builder()
+            .carName("jeep")
+            .carNumber("KA03TP3421")
+            .password("cross")
+            .confirmPassword("cross")
+            .phoneNumber("3452314567")
+            .enabled(true)
+            .build();
 
-		UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
-		String myUid = myId.toString();
+    UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
+    String myUid = myId.toString();
 
-		User user = new User();
-		user.setId(1l);
-		user.setUid(myUid);
+    User user = new User();
+    user.setId(1l);
+    user.setUid(myUid);
 
-		when(myUserRepository.findByUid(myUid)).thenReturn(Optional.of(user));
+    when(myUserRepository.findByUid(myUid)).thenReturn(Optional.of(user));
 
-		assertThrows(RuntimeException.class, () -> myUserService.updateUser(myUid, myUserRequest));
-	}
+    assertThrows(RuntimeException.class, () -> myUserService.updateUser(myUid, myUserRequest));
+  }
 
-	@Test
-	void updateUser() {
+  @Test
+  void updateUser() {
 
-		myUserRequest = UserRequest.builder().carName("jeep").carNumber("KA03TP3421").password("cross")
-				.confirmPassword("cross").phoneNumber("3452314567").enabled(true).email("a@a.com").firstName("a").lastName("b").build();
+    myUserRequest =
+        UserRequest.builder()
+            .carName("jeep")
+            .carNumber("KA03TP3421")
+            .password("cross")
+            .confirmPassword("cross")
+            .phoneNumber("3452314567")
+            .enabled(true)
+            .email("a@a.com")
+            .firstName("a")
+            .lastName("b")
+            .build();
 
-		UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
-		String myUid = myId.toString();
+    UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
+    String myUid = myId.toString();
 
-		User user = new User();
-		user.setId(1l);
-		user.setUid(myUid);
-		user.setPhoneNumber("3452314567");
-		when(myUserRepository.findByUid(myUid)).thenReturn(Optional.of(user));
-		when(myUserRepository.save(any())).thenReturn(user);
-		
-		Optional<?> response = myUserService.updateUser(myUid,myUserRequest);
-		assertEquals(true, response.isPresent());
-		assertEquals(true, ((UserResponse)response.get()).getEnabled());
-	}
-	
-	@Test
-	void updateUser1() {
+    User user = new User();
+    user.setId(1l);
+    user.setUid(myUid);
+    user.setPhoneNumber("3452314567");
+    when(myUserRepository.findByUid(myUid)).thenReturn(Optional.of(user));
+    when(myUserRepository.save(any())).thenReturn(user);
 
-		myUserRequest = UserRequest.builder().carName("jeep").carNumber("KA03TP3421").password("cross")
-				.confirmPassword("cross").phoneNumber("3452314567").enabled(true).build();
+    Optional<?> response = myUserService.updateUser(myUid, myUserRequest);
+    assertEquals(true, response.isPresent());
+    assertEquals(true, ((UserResponse) response.get()).getEnabled());
+  }
 
-		UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
-		String myUid = myId.toString();
+  @Test
+  void updateUser1() {
 
-		User user = new User();
-		user.setId(1l);
-		user.setUid(myUid);
-		user.setPhoneNumber("3452314567");
-		when(myUserRepository.findByUid(myUid)).thenReturn(Optional.of(user));
-		when(myUserRepository.save(any())).thenReturn(user);
-		
-		Optional<?> response = myUserService.updateUser(myUid,myUserRequest);
-		assertEquals(true, response.isPresent());
-		assertEquals(true, ((UserResponse)response.get()).getEnabled());
-	}
+    myUserRequest =
+        UserRequest.builder()
+            .carName("jeep")
+            .carNumber("KA03TP3421")
+            .password("cross")
+            .confirmPassword("cross")
+            .phoneNumber("3452314567")
+            .enabled(true)
+            .build();
 
-	@Test
-	void createNewUser1() {
+    UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
+    String myUid = myId.toString();
 
-		myUserRequest = UserRequest.builder().carName("jeep").carNumber("KA03TP3421").password("cross")
-				.confirmPassword("cross").phoneNumber("3452314567").build();
-		List<AddressRequest> list = new ArrayList<>();
-		list.add(AddressRequest.builder().state("KA").city("Bangalore").flatno("ff 202").name("Prak way enclave")
-				.build());
-		myUserRequest.setAddress(list);
-		UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
-		String myUid = myId.toString();
+    User user = new User();
+    user.setId(1l);
+    user.setUid(myUid);
+    user.setPhoneNumber("3452314567");
+    when(myUserRepository.findByUid(myUid)).thenReturn(Optional.of(user));
+    when(myUserRepository.save(any())).thenReturn(user);
 
-		User user = new User();
-		user.setUid(myUid);
+    Optional<?> response = myUserService.updateUser(myUid, myUserRequest);
+    assertEquals(true, response.isPresent());
+    assertEquals(true, ((UserResponse) response.get()).getEnabled());
+  }
 
-		when(myUserRepository.findByUid(myUid)).thenReturn(Optional.empty());
+  @Test
+  void createNewUser1() {
 
-		when(myUserRepository.save(any())).thenReturn(user);
+    myUserRequest =
+        UserRequest.builder()
+            .carName("jeep")
+            .carNumber("KA03TP3421")
+            .password("cross")
+            .confirmPassword("cross")
+            .phoneNumber("3452314567")
+            .build();
+    List<AddressRequest> list = new ArrayList<>();
+    list.add(
+        AddressRequest.builder()
+            .state("KA")
+            .city("Bangalore")
+            .flatno("ff 202")
+            .name("Prak way enclave")
+            .build());
+    myUserRequest.setAddress(list);
+    UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
+    String myUid = myId.toString();
 
-		Optional<UserResponse> response = myUserService.createUser(myUserRequest);
-		assertEquals(true, response.isPresent());
-		assertEquals(myUid, response.get().getId());
-	}
+    User user = new User();
+    user.setUid(myUid);
 
-	@Test
-	void getAllUsers() {
+    when(myUserRepository.findByUid(myUid)).thenReturn(Optional.empty());
 
-		UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
-		String myUid = myId.toString();
+    when(myUserRepository.save(any())).thenReturn(user);
 
-		User user = new User();
-		user.setUid(myUid);
+    Optional<UserResponse> response = myUserService.createUser(myUserRequest);
+    assertEquals(true, response.isPresent());
+    assertEquals(myUid, response.get().getId());
+  }
 
-		List<User> list = new ArrayList<>();
-		list.add(user);
+  @Test
+  void getAllUsers() {
 
-		when(myUserRepository.findAll()).thenReturn(list);
+    UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
+    String myUid = myId.toString();
 
-		List<UserResponse> response = myUserService.getAllUser();
-		assertEquals(1, response.size());
-	}
+    User user = new User();
+    user.setUid(myUid);
 
-	@Test
-	void getSingleUsersThrowsException() {
+    List<User> list = new ArrayList<>();
+    list.add(user);
 
-		UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
-		String myUid = myId.toString();
+    when(myUserRepository.findAll()).thenReturn(list);
 
-		User user = new User();
-		user.setUid(myUid);
+    List<UserResponse> response = myUserService.getAllUser();
+    assertEquals(1, response.size());
+  }
 
-		List<User> list = new ArrayList<>();
-		list.add(user);
+  @Test
+  void getSingleUsersThrowsException() {
 
-		when(myUserRepository.findByUid(myUid)).thenReturn(Optional.of(user));
+    UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
+    String myUid = myId.toString();
 
-		assertThrows(RuntimeException.class, () -> myUserService.getUser(myUid));
-	}
+    User user = new User();
+    user.setUid(myUid);
 
-	@Test
-	void getSingleUsers() {
+    List<User> list = new ArrayList<>();
+    list.add(user);
 
-		UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
-		String myUid = myId.toString();
+    when(myUserRepository.findByUid(myUid)).thenReturn(Optional.of(user));
 
-		User user = new User();
-		user.setUid(myUid);
-		user.setAddress(new ArrayList<>());
-		List<User> list = new ArrayList<>();
-		list.add(user);
+    assertThrows(RuntimeException.class, () -> myUserService.getUser(myUid));
+  }
 
-		when(myUserRepository.findByUid(myUid)).thenReturn(Optional.of(user));
+  @Test
+  void getSingleUsers() {
 
-		Optional<UserAddressResponse> response = myUserService.getUser(myUid);
+    UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
+    String myUid = myId.toString();
 
-		assertTrue(response.isPresent());
-	}
+    User user = new User();
+    user.setUid(myUid);
+    user.setAddress(new ArrayList<>());
+    List<User> list = new ArrayList<>();
+    list.add(user);
 
-	@Test
-	void getSingleUsers1() {
+    when(myUserRepository.findByUid(myUid)).thenReturn(Optional.of(user));
 
-		UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
-		String myUid = myId.toString();
+    Optional<UserAddressResponse> response = myUserService.getUser(myUid);
 
-		User user = new User();
-		user.setUid(myUid);
+    assertTrue(response.isPresent());
+  }
 
-		List<User> list = new ArrayList<>();
-		list.add(user);
+  @Test
+  void getSingleUsers1() {
 
-		when(myUserRepository.findByUid(myUid)).thenReturn(Optional.empty());
+    UUID myId = UUID.nameUUIDFromBytes(String.valueOf(Objects.hashCode(myUserRequest)).getBytes());
+    String myUid = myId.toString();
 
-		Optional<UserAddressResponse> response = myUserService.getUser(myUid);
-		assertEquals(true, response.isEmpty());
-	}
+    User user = new User();
+    user.setUid(myUid);
+
+    List<User> list = new ArrayList<>();
+    list.add(user);
+
+    when(myUserRepository.findByUid(myUid)).thenReturn(Optional.empty());
+
+    Optional<UserAddressResponse> response = myUserService.getUser(myUid);
+    assertEquals(true, response.isEmpty());
+  }
 }
