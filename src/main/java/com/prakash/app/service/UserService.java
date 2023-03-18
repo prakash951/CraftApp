@@ -152,6 +152,7 @@ public class UserService {
     log.info("Inside create success response");
     UserResponse response = new UserResponse();
     BeanUtils.copyProperties(user, response);
+    response.setEnabled(user.getEnabled());
     response.setId(String.valueOf(user.getUid()));
     response.setName(getName(user));
     return Optional.of(response);

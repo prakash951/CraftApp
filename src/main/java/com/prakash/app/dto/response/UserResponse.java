@@ -17,4 +17,5 @@ public class UserResponse implements UserResponseInterface {
   private String phoneNumber;
   private String carName;
   private String carNumber;
+  private Boolean enabled;
 }
