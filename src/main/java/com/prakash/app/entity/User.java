@@ -50,7 +50,7 @@ public class User {
   String carName;
 
   @Column(name = "enabled")
-  boolean enabled;
+  Boolean enabled;
 
   @Column(name = "createdby")
   String createdBy;

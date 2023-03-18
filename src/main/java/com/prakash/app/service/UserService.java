@@ -134,6 +134,9 @@ public class UserService {
     if (request.getLastName() != null) {
       existingUser.setLastName(request.getLastName());
     }
+    if (request.getEnabled() != null) {
+      existingUser.setEnabled(request.getEnabled());
+    }
   }
 
   @Recover

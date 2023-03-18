@@ -40,6 +40,9 @@ public class UserRequest {
   @Size(max = 20)
   String carName;
 
+  @JsonProperty("enabled")
+  Boolean enabled;
+
   @JsonProperty("address")
   List<AddressRequest> address;
 }
