@@ -43,6 +43,14 @@ dependencies {
 	implementation 'com.h2database:h2'
 }
 
+build.dependsOn jacocoTestReport
+
+sonar {
+    properties {
+        property "sonar.exclusions", "**/"
+    }
+}
+
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"

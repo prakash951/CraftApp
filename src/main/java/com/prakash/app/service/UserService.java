@@ -194,7 +194,7 @@ public class UserService {
   @Retryable(maxAttempts = 2, recover = "getBackOffAllUser", backoff = @Backoff(delay = 100))
   public List<UserResponse> getAllUser(Integer pageNumber, Integer pageSize) {
     if (pageNumber != null && pageSize != null) {
-      log.info("Inside get all users");
+      log.info("Inside getAllUser");
       log.info("Requesting users of page:" + pageNumber);
       PageRequest pageRequest = PageRequest.of(Math.max(0, pageNumber - 1), pageSize);
       Page<User> users = myUserRepository.findAll(pageRequest);
@@ -210,14 +210,14 @@ public class UserService {
 
   @Recover
   public List<UserResponse> getBackOffAllUser() {
-    log.info("Inside get all users");
+    log.info("Inside getBackOffAllUser");
     List<UserResponse> users = new ArrayList<>();
     return users;
   }
 
   @Retryable(maxAttempts = 2, recover = "getBackOffAllUser", backoff = @Backoff(delay = 100))
   public List<UserResponse> getAllUser() {
-    log.info("Inside get all users");
+    log.info("Inside getAllUser with no paging");
     List<User> users = myUserRepository.findAll();
     return users.stream()
         .map(this::createSuccessResponse)
