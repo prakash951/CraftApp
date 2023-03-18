@@ -1,22 +1,24 @@
 package com.prakash.app.exception;
 
 import com.prakash.app.dto.response.ErrorMessage;
+import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-public class CraftControllerAdvice extends ResponseEntityExceptionHandler {
+public class CraftControllerAdvice {
 
-  @ExceptionHandler(value = Exception.class)
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public ResponseEntity<ErrorMessage> handleException(Exception exception) {
+  @ExceptionHandler(BindException.class)
+  public ResponseEntity<ErrorMessage> handleInValidBindException(BindException exception) {
     ErrorMessage errorMessage = new ErrorMessage();
-    errorMessage.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value() + "");
-    errorMessage.setMessage(exception.getMessage());
-    return ResponseEntity.internalServerError().body(errorMessage);
+    errorMessage.setCode(HttpStatus.BAD_REQUEST.value() + "");
+    errorMessage.setMessage(
+        exception.getFieldErrors().stream()
+            .map(e -> String.join(": ", e.getField(), e.getDefaultMessage()))
+            .collect(Collectors.joining(", ")));
+    return ResponseEntity.badRequest().body(errorMessage);
   }
 }

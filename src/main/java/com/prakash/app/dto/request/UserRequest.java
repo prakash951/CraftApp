@@ -26,7 +26,10 @@ public class UserRequest {
   @Pattern(regexp = "[1-9]{1}[0-9]{8,9}")
   String phoneNumber;
 
-  @NotBlank @NotEmpty @Email String email;
+  @NotBlank
+  @NotEmpty
+  @Email(message = "Email Should be in the format a@a.com ")
+  String email;
 
   @Size(max = 12)
   String password;
