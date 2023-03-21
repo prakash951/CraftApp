@@ -8,10 +8,6 @@ volumes:
   data1-2:
   data2-1:
   data2-2:
-  data3-1:
-  data3-2:
-  data4-1:
-  data4-2:
   
 x-minio-common: &minio-common
   image: quay.io/minio/minio:RELEASE.2023-03-13T19-46-17Z
@@ -86,6 +82,8 @@ services:
       depends_on:
         - upostgres
         - jaeger
+        - minio1
+        - minio2
       ports:
         - "12345-12346:12345"
       deploy:
@@ -109,6 +107,8 @@ services:
     volumes:
       - data1-1:/data1
       - data1-2:/data2
+    ports:
+      - "9900:9000"
 
   minio2:
     <<: *minio-common
@@ -116,6 +116,8 @@ services:
     volumes:
       - data2-1:/data1
       - data2-2:/data2
+    ports:
+      - "9901:9000"
 
   nginx:
     image: nginx:1.19.2-alpine

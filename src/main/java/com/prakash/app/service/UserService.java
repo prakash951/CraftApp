@@ -39,6 +39,8 @@ public class UserService {
 
   @Autowired AddressRepository myAddressRepository;
 
+  @Autowired MinioService myMinioService;
+
   @Transactional
   @Retryable(maxAttempts = 2, recover = "createBackOffResponse", backoff = @Backoff(delay = 100))
   public Optional<UserResponse> createUser(UserRequest request) {
@@ -53,6 +55,7 @@ public class UserService {
       newUser.setPassword(getDigest(request.getPassword()));
       newUser.setConfirmPassword(getDigest(request.getPassword()));
       myUserRepository.save(newUser);
+      myMinioService.create(myUid);
       if (request.getAddress() != null)
         request.getAddress().stream()
             .map(addres -> createAddress(addres, newUser))

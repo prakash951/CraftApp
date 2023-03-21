@@ -29,3 +29,8 @@ opentracing:
     service-name: uber
     http-sender:
       url: ${JAEGAR_URL:http://localhost:80} 
+      
+minio:
+  url: http://minio1:9000
+  accessKey: HaNGdYulQ2PgDT8W
+  secretKey: TKZD4V3AVkJ0s8MzuuFfA1fi4z7pN90F

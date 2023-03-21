@@ -31,6 +31,8 @@ class UserServiceTest {
 
   @Mock AddressRepository myAddressRepository;
 
+  @Mock MinioService myMinioService;
+
   UserRequest myUserRequest;
 
   @InjectMocks UserService myUserService;
