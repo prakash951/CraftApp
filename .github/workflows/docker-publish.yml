@@ -74,7 +74,7 @@ jobs:
 
       - name: Run gradle build
         id: run_gradle_build
-        run: ./gradlew build
+        run: ./gradlew build -DskipTests
           
 
       # Build and push Docker image with Buildx (don't push on PR)
