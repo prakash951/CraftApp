@@ -69,11 +69,11 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       - name: Listing current directory
-        id: list command
+        id: list_command
         run: ls -ltr
 
       - name: Run gradle build
-        id: run gradle build
+        id: run_gradle_build
         run: ./gradlew build
           
 
